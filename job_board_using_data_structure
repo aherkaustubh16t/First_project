@@ -1,0 +1,313 @@
+//Job Board System Using Data Structure
+#include <iostream>
+
+using namespace std;
+
+class node
+{
+public:
+    string ename,edate,email,epos,phone,current;
+    int id;
+    char name[20], post[20];
+    float sal;
+    node *link;
+    node *prev;
+
+    void view_form();
+    void create();
+    void display();
+    void add();
+    void del();
+    void apply();
+
+} *start=NULL, *start1 = NULL;
+
+void node::create()
+{
+    node *ptr;
+    int c = 0;
+    ptr = new node;
+    cout << "Enter the Job Id: ";
+    cin >> ptr->id;
+    cout << "Enter the Job Name: ";
+    cin >> ptr->name;
+    cout << "Enter the Job Post: ";
+    cin >> ptr->post;
+    cout << "Enter the Job Salary: ";
+    cin >> ptr->sal;
+
+    ptr->prev = nullptr;
+    ptr->link = start;
+    if (start != nullptr)
+        start->prev = ptr;
+    start = ptr;
+    cout << "Do you want to add more? (1.Add / 2.Stop): ";
+    cin >> c;
+    if (c == 1)
+    {
+        create();
+    }
+}
+
+
+void node::display()
+{
+    int i = 1;
+    node *ptr = start;
+    if (ptr == nullptr)
+    {
+        cout << "List is empty!!!" << endl;
+    }
+    else
+    {
+        cout << "Sr.no\tJob Id\tJob Name\tJob Post\tJob Salary" << endl;
+        while (ptr != nullptr)
+        {
+            cout << i << "\t";
+            cout << ptr->id << "\t";
+            cout << ptr->name << "\t\t";
+            cout << ptr->post << "\t\t";
+            cout << ptr->sal << "\t" << endl;
+            ptr = ptr->link;
+            i++;
+        }
+
+        cout << "The number of records are: " << i - 1 << endl;
+    }
+}
+
+
+void node::add()
+{
+    node *ptr, *temp;
+    temp = new node;
+    cout << "Enter the Job Id: ";
+    cin >> temp->id;
+    cout << "Enter the Job Name: ";
+    cin >> temp->name;
+    cout << "Enter the Job Post: ";
+    cin >> temp->post;
+    cout << "Enter the Job Salary: ";
+    cin >> temp->sal;
+
+    temp->prev = nullptr;
+    temp->link = nullptr;
+
+    if (start == nullptr)
+    {
+        start = temp;
+    }
+    else
+    {
+        ptr = start;
+        while (ptr->link != nullptr)
+        {
+            ptr = ptr->link;
+        }
+        ptr->link = temp;
+        temp->prev = ptr;
+    }
+}
+
+void node :: apply()
+{
+
+    node *temp1;
+    temp1 = new node;
+
+
+    cout<<" *************** Job Application Form **************"<<endl;
+    cout<<"\n";
+    cout<<"Enter Your Name  ";
+    cout<<"First Name\tSecond Name\tLast Name "<<endl;
+    cout<<"             =>  ";
+    cin>>temp1->ename;
+
+    cout<<"Enter Your BirthDate  ";
+    cout<<"Month\tDay\tYear"<<endl;
+    cout<<"                 =>   ";
+    cin>>temp1->edate;
+
+    cout<<"Enter Your Email Id:- ";
+    cin>>temp1->email;
+
+    cout<<"enter Your Phone No:- ";
+    cin>>temp1->phone;
+
+    cout<<"Enter the job name you are applying:- ";
+    cin>>temp1->epos;
+
+    cout<<"For Which Post You Are Applying:- ";
+    cin>>temp1->current;
+
+    int c;
+
+    temp1->prev = nullptr;
+    temp1->link = start1;
+    if (start1 != nullptr)
+        start1->prev =temp1;
+    start1 = temp1;
+    cout << "Do you want to aply for more job? (1.Add / 2.Stop): ";
+    cin >> c;
+    if (c == 1)
+    {
+        create();
+    }
+
+    cout<<"\nThanks For Applying The Job\nWe will response soon";
+
+}
+
+
+void node :: view_form()
+{
+    cout<<"This many people have Apply for Various Jobs"<<endl;
+
+    int i = 1;
+    node *ptr1 = start1;
+    if (ptr1 == nullptr)
+    {
+        cout << "List is empty!!!" << endl;
+    }
+    else
+    {
+        cout<<"**********************   This is the Details of Applied Users   *******************"<<endl;
+        cout << "Sr.no\tuser Name\tBirthdate\tEmail\t\tPhone No\t\tJob Name\t\tPosition" << endl;
+        while (ptr1 != nullptr)
+        {
+            cout << i << "\t";
+            cout << ptr1->ename << "\t";
+            cout << ptr1->edate << "\t";
+            cout << ptr1->email << "\t\t";
+            cout << ptr1->phone << "\t\t"; 
+            cout << ptr1->epos << "\t\t";
+            cout << ptr1->current << "\t\t"<<endl;
+            ptr1 = ptr1->link;
+            i++;
+        }
+
+        cout << "The number of records are: " << i - 1 << endl;
+    }
+}
+
+void node::del()
+{
+    node *temp = start;
+    int pos, i = 1;
+
+    cout << "Enter the job number you want to delete: ";
+    cin >> pos;
+
+    if (pos == 1) {
+        start = temp->link;
+        if (start != nullptr)
+            start->prev = nullptr;
+        delete temp;
+        cout << "Job deleted successfully!" << endl;
+        return;
+    }
+
+    while (temp != nullptr && i < pos) {
+        temp = temp->link;
+        i++;
+    }
+
+    if (temp == nullptr) {
+        cout << "Invalid job number!" << endl;
+        return;
+    }
+
+    if (temp->link != nullptr) {
+        temp->link->prev = temp->prev;
+    }
+
+    if (temp->prev != nullptr) {
+        temp->prev->link= temp->link;
+    }
+
+    delete temp;
+    cout << "Job deleted successfully!" << endl;
+}
+
+int main()
+{
+    node n;
+    int t=0;
+    int ch1, ch2, ch3;
+    do
+    {
+        cout << "\n1=> To Login As Admin\t\t2.=> To LOgin as Customer\n3=> To Logout" << endl;
+        cin >> ch1;
+        if(ch1 == 1)
+        {
+            cout << "\nEnter the ADMIN code";
+            cin >>t;
+            if(t == 166)
+            {
+                do
+                {
+                    cout << "\nMENU \n1.Insert The Jobs\n2.Delete The Job\n3.Add Jobs\n4.Display The Jobs\n5.View the User Applications \n0.Logout" << endl;
+                    cout << "Enter your Choice" <<endl;
+                    cin >> ch2;
+                    switch (ch2)
+                    {
+                    case 1:
+                    {
+                        n.create();
+                        break;
+                    }
+                    case 2:
+                    {
+                        n.del();
+                        break;
+                    }
+                    case 3:
+                    {
+                        n.add();
+                        break;
+                    }
+                    case 4:
+                    {
+                        n.display();
+                        break;
+                    }
+                    case 5:
+                    {
+                        n.view_form();
+                        break;
+                    }
+                    }
+                } while (ch2 != 0);
+            }
+            else
+            {
+                cout<<"Enter The Correct Admin Code"<<endl;
+
+            }
+        }
+        else if(ch1==2)
+        {
+            do
+            {
+                cout << "\nMENU \n1.Display the available Jobs\n2.Apply For Job\n0.Logout" << endl;
+                cout << "Enter your Choice" << endl;
+                cin >> ch3;
+                switch (ch3)
+                {
+                case 1:
+                {
+                    n.display();
+                    break;
+                }
+                case 2:
+                {
+                    n.apply();
+                    break;
+                }
+                }
+            } while (ch3 != 0);
+        }
+    }while (ch1!=3);
+
+    return 0;
+}
