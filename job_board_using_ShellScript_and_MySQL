@@ -1,0 +1,207 @@
+//Job Board System using DBBMS and SHELLSCRIPT
+
+echo "use job_board">insert.sql
+echo "use job_board">display.sql
+echo "use job_board">searchjob.sql
+echo "use job_board">delete.sql
+echo "use job_board">form.sql
+echo "use job_board">vform1.sql
+
+while [[ $ch -ne 3 ]];
+do
+   echo " "
+   echo "*** Front Page****"
+   echo "1.Admin Login        2.User Login        3.Exit"
+   echo " "
+   echo "Enter your choice:- "
+   read ch
+
+   if [[ $ch -eq 1 ]];
+   then
+
+      echo "Enter Admin code"
+      read ac
+
+      # Admin code = 16
+
+      if [[ $ac -eq 16 ]];
+      then
+
+                while true
+                do
+                    echo "     "
+                    echo "**** ADMIN MAIN MENU ****"
+                    echo "1.Add Job"
+                    echo "2.Display Jobs"
+                    echo "3.Open Job"
+                    echo "4.Delete Jobs"
+                    echo "5.View Application Forms"
+                    echo "6.Update The job"
+                    echo "7.Logout"
+                    echo " "
+                    echo "enter Your Option:- "
+                    read option
+                    case $option in
+
+                    1)
+                          echo "  "
+                          echo "Enter the JOb Id:- "
+                          read id
+                          echo "Enter Job Title:- "
+                          read title
+                          echo "Enter the Company Name:- "
+                          read company
+                          echo "Enter the Location of work:- "
+                          read location
+                          echo "Enter the Status of the job:- "
+                          read description
+                          echo "Enter the date:- "
+                          read date
+                          echo "Enter the Salary:- "
+                          read salary
+
+                          echo "INSERT INTO job VALUES('$id','$title','$company','$location','$description','$date','$salary');" >>insert.sql
+
+                          sudo mysql -u root < insert.sql
+
+                          sed -i "/INSERT INTO job VALUES('$id','$title','$company','$location','$description','$date','$salary');/d" /home/aher16/insert.sql
+
+                          echo "Data Inserted SuccessFully..."
+                          ;;
+
+                    2)
+                          echo " "
+                          echo "SELECT id,title,company,salary FROM job;" >>display.sql
+                          sudo mysql -u root < display.sql
+
+                          sed -i '/SELECT id,title,company,salary FROM job;/d' /home/aher16/display.sql
+
+                          ;;  
+
+                    3)
+                          echo " "
+                          echo "Enter the job id:- "
+                          read jid
+
+                          echo "SELECT * FROM job WHERE id = $jid;">>searchjob.sql   
+                          sudo mysql -u root < searchjob.sql        
+                          sed -i "/SELECT * FROM job WHERE id = $jid;/d" /home/aher16/searchjob.sql
+                          ;; 
+
+                    4) 
+                          echo " "
+                          echo "Enter the job id which you want to Delete:- "
+                          read did
+
+                          echo "DELETE FROM job WHERE id = $did;">>delete.sql
+                          sudo mysql -u root < delete.sql
+
+                         sed -i "/DELETE FROM job WHERE id = $did;/d" /home/aher16/delete.sql
+                         echo "Data Deleted Sucessfully"
+                          ;;
+
+                   5)
+                          echo " "
+                          echo "SELECT * FROM form;">>searchjob.sql
+
+                          sudo mysql -u root < searchjob.sql
+
+                          sed -i '/SELECT * FROM form;/d' /home/aher16/searchjob.sql
+                          ;;
+                   6)
+
+                          echo " "
+                          echo "Enter which job you want to Update:- "
+                          read nid
+                          echo "Enter Job Title"
+                          read jtitle1
+                          echo "Enter The company name:- "
+                          read cname2
+                          echo "Enter The Job Location:- "
+                          read jloc
+                          echo "Enter The Job Status:- "
+                          read jstatus
+                          echo "Enter The Date:- "
+                          read jdate
+                          echo "Enter The Salary:- "
+                          read jsalary
+
+                          echo "UPDATE job SET title = '$jtitle1' , company = '$cname2', location = '$jloc', description = '$jstatus', date = '$jdate', salary = '$jsalary' where id = $nid;" >>display.sql
+                          sudo mysql -u root < display.sql
+                          ;;
+                   7)
+                          break
+                          ;;
+
+                   esac
+                done
+
+      else
+          echo " "
+          echo "Please Enter correct admin code..."
+      fi
+
+   elif [[ $ch -eq 2 ]];
+   then
+
+      while true 
+      do
+           echo "     "
+           echo "**** User MAIN MENU ****"
+           echo "1.Display Jobs"
+           echo "2.Open Job "
+           echo "3.Application Form"
+           echo "4.Logout"
+           echo " "
+           echo "enter Your Option:- "        
+           read option2
+
+           case $option2 in
+           1)
+               echo " "
+               echo "SELECT id,title,company,salary FROM job;" >>display.sql
+               sudo mysql -u root < display.sql
+
+               sed -i '/SELECT id,title,company,salary FROM job;/d' /home/aher16/display.sql
+               ;;
+
+           2)
+               echo " "
+               echo "Enter the job id:- "
+               read jid
+
+               echo "SELECT * FROM job WHERE id = $jid;">>display.sql
+               sudo mysql -u root < display.sql
+
+               sed -i "/SELECT * FROM job WHERE id = $jid;/d" /home/aher16/display.sql
+               ;;
+
+           3)  
+               echo " "
+               echo "Enter No :- "
+               read sn
+               echo "Enter Your Name:- "
+               read name
+               echo "Enter Your Phone No:- "
+               read phone
+               echo "Enter your Required post:- "
+               read post
+               echo "Enter Your adress:- "
+               read addr
+
+               echo "INSERT INTO form () VALUES('$sn','$name','$phone','$post','$addr');">>vform1.sql
+
+               sudo mysql -u root < vform1.sql;
+
+               sed -i "/INSERT INTO form () VALUES('$sn','$name','$phone','$post','$addr');/d" /home/aher16/vform1.sql 
+
+               echo "Your Application Form Submitted Sucessfully..."
+               ;;
+
+           4)
+               break
+               ;;
+           esac
+      done                        
+   fi
+done
